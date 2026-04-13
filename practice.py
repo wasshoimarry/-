@@ -1,9 +1,10 @@
 import streamlit as st
+from st_keyup import st_keyup
 
 st.set_page_config(page_title="就活用 文字数カウントツール", layout="centered")
 
 st.title("就活用 文字数カウントツール")
-st.caption("エントリーシートや志望動機の文字数を自動でカウントします")
+st.caption("入力しながら文字数をリアルタイムでカウントします")
 
 limit_options = [200, 300, 400, 500]
 
@@ -12,7 +13,6 @@ if "limit" not in st.session_state:
 
 st.write("### 文字数上限を選択")
 cols = st.columns(len(limit_options))
-
 for i, value in enumerate(limit_options):
     if cols[i].button(f"{value}字", use_container_width=True):
         st.session_state.limit = value
@@ -21,16 +21,15 @@ limit = st.number_input(
     "文字数上限を手入力",
     min_value=1,
     value=st.session_state.limit,
-    step=50
+    step=50,
 )
-
 st.session_state.limit = int(limit)
 
-text = st.text_area(
+text = st_keyup(
     "文章を入力してください",
-    height=300,
+    value="",
+    key="es_text",
     placeholder="ここにESの文章を入力してください",
-    key="es_text"
 )
 
 count = len(text)
